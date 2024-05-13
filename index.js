@@ -48,11 +48,17 @@ async function run() {
             const result = await servicesCollection.findOne(query);
             res.send(result)
         })
-        app.post('/services/booked', async (req, res) => {
+        app.post('/bookedService', async (req, res) => {
             const newBookedService = req.body;
             const result = await bookedServices.insertOne(newBookedService)
             res.send(result)
             console.log(newBookedService)
+        })
+
+        app.get('/bookedService', async (req, res) => {
+            const cursor = bookedServices.find()
+            const result = await cursor.toArray()
+            res.send(result)
         })
 
         // Connect the client to the server	(optional starting in v4.7)
