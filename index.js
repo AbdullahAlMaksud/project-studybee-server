@@ -27,28 +27,33 @@ async function run() {
     try {
 
         const servicesCollection = client.db('servicesDB').collection('services')
+        const bookedServices = client.db('servicesDB').collection('bookedServices')
 
-        app.get('/services', async(req,res)=>{
+        app.get('/services', async (req, res) => {
             const cusor = servicesCollection.find()
             const result = await cusor.toArray()
             res.send(result)
         })
 
-        app.post('/services', async(req,res)=>{
+        app.post('/services', async (req, res) => {
             const newServices = req.body;
             const result = await servicesCollection.insertOne(newServices)
             res.send(result)
             console.log(newServices)
         })
 
-        app.get('/services/:id', async(req,res)=>{
+        app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await servicesCollection.findOne(query);
             res.send(result)
         })
-
-
+        app.post('/services/booked', async (req, res) => {
+            const newBookedService = req.body;
+            const result = await bookedServices.insertOne(newBookedService)
+            res.send(result)
+            console.log(newBookedService)
+        })
 
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
@@ -58,7 +63,7 @@ async function run() {
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
-        
+
     }
 }
 run().catch(console.dir);
