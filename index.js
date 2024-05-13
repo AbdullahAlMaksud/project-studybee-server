@@ -61,6 +61,15 @@ async function run() {
             res.send(result)
         })
 
+        app.get('/servicesByYou/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { providerEmail: email }
+
+            const cursor = servicesCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         // Send a ping to confirm a successful connection
