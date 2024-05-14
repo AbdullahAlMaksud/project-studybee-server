@@ -135,6 +135,14 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result)
         })
+        
+        app.get('/myPendingService/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { providerEmail: email }
+            const cursor = bookedServices.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
 
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
