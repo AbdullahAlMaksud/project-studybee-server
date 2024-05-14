@@ -100,6 +100,42 @@ async function run() {
             res.send(result)
         })
 
+        app.get('/totalService', async (req, res) => {
+            const search = req.query.search
+            let query = {
+                serviceName: {
+                    $regex: search, $options: 'i'
+                }
+            }
+            const count = await servicesCollection.countDocuments(query)
+            res.send({ count })
+        })
+
+        app.get('/allServices', async (req, res) => {
+            const size = parseInt(req.query.size)
+            const page = parseInt(req.query.page) - 1
+            const search = req.query.search
+            console.log(size, page)
+
+            let query = {
+                serviceName: {
+                    $regex: search, $options: 'i'
+                },
+            }
+
+            const result = await servicesCollection.find(query).skip(page * size).limit(size).toArray()
+
+            res.send(result)
+        })
+
+        app.get('/myBookedService/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { userEmail: email }
+            const cursor = bookedServices.find(query);
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         // Send a ping to confirm a successful connection
