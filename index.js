@@ -70,13 +70,35 @@ async function run() {
             res.send(result)
         })
 
-
         app.delete('/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await servicesCollection.deleteOne(query);
             res.send(result)
-          })
+        })
+
+        app.put('/services/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const option = { upsert: true }
+            const updateService = req.body;
+
+            const service = {
+                $set: {
+                    serviceName: updateService.serviceName,
+                    imgURL: updateService.imgURL,
+                    serviceArea: updateService.serviceArea,
+                    price: updateService.price,
+                    description: updateService.description,
+                    providerEmail: updateService.providerEmail,
+                    providerPhoto: updateService.providerPhoto,
+                    providerName: updateService.providerName
+                }
+            }
+
+            const result = await servicesCollection.updateOne(filter, service, option)
+            res.send(result)
+        })
 
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
