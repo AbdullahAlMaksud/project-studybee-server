@@ -144,17 +144,29 @@ async function run() {
             res.send(result)
         })
 
-        // app.patch('/booking/:id', async(req,res)=>{
-        //     const id = req.params.id
-        //     const status = req.body;
-        //     const query = {_id: new ObjectId(id)}
-        //     const updateDoc = {
-        //         $set: {serviceStatus: status}
-        //     }
-        //     const result = await bookedServices.updateOne(query, updateDoc)
-        //     res.send(result)
-        //     console.log(status)
-        // })
+        app.patch('/booking/:id', async (req, res) => {
+            const id = req.params.id
+            const status = req.body;
+            const query = { _id: new ObjectId(id) }
+            const updateDoc = {
+                $set: { serviceStatus: status.working }
+            }
+            const result = await bookedServices.updateOne(query, updateDoc)
+            // res.send(result)
+            console.log(status)
+            console.log(id)
+
+            const option = { upsert: true }
+            const updateService = req.body;
+        })
+
+        app.get('/booking-service/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await bookedServices.findOne(query)
+            // console.log(status)
+            res.send(result)
+        })
 
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
