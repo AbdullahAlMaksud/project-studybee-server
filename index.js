@@ -135,7 +135,7 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result)
         })
-        
+
         app.get('/myPendingService/:email', async (req, res) => {
             const email = req.params.email;
             const query = { providerEmail: email }
@@ -143,6 +143,18 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result)
         })
+
+        // app.patch('/booking/:id', async(req,res)=>{
+        //     const id = req.params.id
+        //     const status = req.body;
+        //     const query = {_id: new ObjectId(id)}
+        //     const updateDoc = {
+        //         $set: {serviceStatus: status}
+        //     }
+        //     const result = await bookedServices.updateOne(query, updateDoc)
+        //     res.send(result)
+        //     console.log(status)
+        // })
 
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
