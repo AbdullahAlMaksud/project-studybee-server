@@ -28,6 +28,7 @@ async function run() {
 
         const servicesCollection = client.db('servicesDB').collection('services')
         const bookedServices = client.db('servicesDB').collection('bookedServices')
+        const faqCollection = client.db('servicesDB').collection('faqCollection')
 
         app.get('/services', async (req, res) => {
             const cusor = servicesCollection.find()
@@ -149,13 +150,10 @@ async function run() {
             const status = req.body;
             const query = { _id: new ObjectId(id) }
             const updateDoc = {
-                $set: { serviceStatus: status.working }
+                $set: { serviceStatus: status.newStatus }
             }
             const result = await bookedServices.updateOne(query, updateDoc)
-            // res.send(result)
-            console.log(status)
-            console.log(id)
-
+            console.log(updateDoc)
             const option = { upsert: true }
             const updateService = req.body;
         })
@@ -165,6 +163,18 @@ async function run() {
             const query = { _id: new ObjectId(id) }
             const result = await bookedServices.findOne(query)
             // console.log(status)
+            res.send(result)
+        })
+
+        app.post('/faq', async (req, res) => {
+            const newFaq = req.body;
+            const result = await faqCollection.insertOne(newFaq)
+            res.send(result)
+            console.log(newFaq)
+        })
+        app.get('/faq', async (req, res) => {
+            const cursor = faqCollection.find()
+            const result = await cursor.toArray()
             res.send(result)
         })
 
