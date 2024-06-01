@@ -29,6 +29,7 @@ async function run() {
         const servicesCollection = client.db('servicesDB').collection('services')
         const bookedServices = client.db('servicesDB').collection('bookedServices')
         const faqCollection = client.db('servicesDB').collection('faqCollection')
+        const blogCollection = client.db('blogDB').collection('blogCollection')
 
         app.get('/services', async (req, res) => {
             const cusor = servicesCollection.find()
@@ -177,7 +178,18 @@ async function run() {
             const result = await cursor.toArray()
             res.send(result)
         })
-
+        
+        app.post('/blogs', async (req, res) => {
+            const blog = req.body;
+            const result = await blogCollection.insertOne(blog)
+            res.send(result)
+            console.log(blog)
+        })
+        app.get('/blogs', async (req, res) => {
+            const cursor = blogCollection.find()
+            const result = await cursor.toArray()
+            res.send(result)
+        })
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         // Send a ping to confirm a successful connection
